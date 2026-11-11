@@ -1,372 +1,70 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chúc Mừng Sinh Nhật Công Chúa 💖</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Quicksand:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- JS Confetti & Canvas Effects -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Công Chúa</title>
+  <style>
+    :root {
+      --bg-color: #f7e6e3;
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --primary: #f28b82;
+      --primary-hover: #e57373;
+      --text-color: #5f6368;
+      --accent: #e91e63;
+    }
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        pastel: {
-                            bg: '#FDF0ED',
-                            card: '#FFFFFF',
-                            accent: '#E89088',
-                            hover: '#D67B73',
-                            btn: '#FFF5F3',
-                            btnHover: '#FCEAE7',
-                            textPrimary: '#6B433C',
-                            textSub: '#A57C76',
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Quicksand', 'sans-serif'],
-                        cursive: ['Dancing Script', 'cursive'],
-                        serif: ['Playfair Display', 'serif']
-                    }
-                }
-            }
-        }
-    </script>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      user-select: none;
+    }
 
-    <style>
-        /* Falling Hearts Animation */
-        .heart-particle {
-            position: absolute;
-            pointer-events: none;
-            animation: floatUp 8s linear infinite;
-            opacity: 0.6;
-        }
+    body {
+      background-color: var(--bg-color);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
 
-        @keyframes floatUp {
-            0% {
-                transform: translateY(105vh) scale(0.5) rotate(0deg);
-                opacity: 0.7;
-            }
-            100% {
-                transform: translateY(-10vh) scale(1.2) rotate(360deg);
-                opacity: 0;
-            }
-        }
+    /* Floating hearts background */
+    .bg-heart {
+      position: absolute;
+      color: rgba(242, 139, 130, 0.4);
+      animation: floatUp linear infinite;
+      z-index: 1;
+      pointer-events: none;
+    }
 
-        /* Shake animation for incorrect password */
-        .shake {
-            animation: shake 0.4s ease-in-out;
-        }
+    @keyframes floatUp {
+      0% {
+        transform: translateY(100vh) scale(0.5) rotate(0deg);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-10vh) scale(1.2) rotate(360deg);
+        opacity: 0;
+      }
+    }
 
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-10px); }
-            40%, 80% { transform: translateX(10px); }
-        }
+    /* Main Card Container */
+    .card-container {
+      background: var(--card-bg);
+      padding: 24px;
+      border-radius: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      display: flex;
+      gap: 24px;
+      max-width: 680px;
+      width: 90%;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
 
-        /* Custom Keypad active feedback */
-        .key-btn:active {
-            transform: scale(0.92);
-            background-color: #f3dcd8 !important;
-        }
-
-        /* Hide Scrollbar */
-        ::-webkit-scrollbar {
-            width: 0px;
-            background: transparent;
-        }
-    </style>
-</head>
-<body class="bg-[#F6E6E3] font-sans h-screen w-screen overflow-hidden flex items-center justify-center relative select-none">
-
-    <!-- Ambient Heart Background Container -->
-    <div id="hearts-container" class="absolute inset-0 overflow-hidden pointer-events-none z-0"></div>
-
-    <!-- Music Control Button -->
-    <button id="musicToggle" class="absolute top-5 right-5 z-50 bg-white/80 backdrop-blur-md p-3 rounded-full shadow-md text-pastel-textPrimary hover:scale-105 transition-all duration-300 flex items-center justify-center w-11 h-11">
-        <i id="musicIcon" class="fas font-solid fa-music text-lg"></i>
-    </button>
-    <audio id="bgMusic" loop preload="auto">
-        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=happy-birthday-114480.mp3" type="audio/mpeg">
-    </audio>
-
-    <!-- Main Container Card -->
-    <main id="mainCard" class="relative z-10 w-[92%] max-w-[820px] bg-white/95 backdrop-blur-sm rounded-[28px] shadow-2xl p-4 sm:p-7 transition-all duration-500 border border-white/60">
-        
-        <!-- UI STATE 1: LOCK SCREEN (PIN KEYPAD) -->
-        <div id="lockScreen" class="flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-8">
-            
-            <!-- Left Side: Image Preview -->
-            <div class="relative w-full sm:w-[48%] h-[260px] sm:h-[380px] rounded-[22px] overflow-hidden shadow-inner group">
-                <img id="princessPhoto" 
-                     src="https://cdn.phototourl.com/member/2026-11-11-be2d8314-f387-4693-be30-53941f0a9e3c.jpg" 
-                     alt="Công chúa" 
-                     class="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60"></div>
-                <div class="absolute bottom-3 left-3 right-3 text-white text-center">
-                    <p class="font-cursive text-2xl tracking-wide">Princess Birthday</p>
-                </div>
-            </div>
-
-            <!-- Right Side: Keypad & Code Display -->
-            <div class="w-full sm:w-[52%] flex flex-col items-center justify-center px-2">
-                
-                <!-- Title Header -->
-                <h2 class="text-pastel-textPrimary font-bold text-lg sm:text-xl text-center mb-4 tracking-tight">
-                    Hãy nhập ngày sinh của công chúa 💕
-                </h2>
-
-                <!-- PIN Input Display Box -->
-                <div id="pinDisplay" class="w-full bg-[#FDF0ED] h-12 rounded-xl flex items-center justify-center gap-3 mb-5 px-4 shadow-inner border border-pastel-accent/20 transition-all">
-                    <!-- Dots generated by JS -->
-                    <span class="dot text-2xl text-pastel-accent font-bold">•</span>
-                    <span class="dot text-2xl text-pastel-accent font-bold">•</span>
-                    <span class="dot text-2xl text-pastel-accent font-bold">•</span>
-                    <span class="dot text-2xl text-pastel-accent font-bold">•</span>
-                </div>
-
-                <!-- Custom Numeric Keypad -->
-                <div class="grid grid-cols-3 gap-2.5 w-full max-w-[300px]">
-                    <button class="key-btn h-12 rounded-xl bg-pastel-btn text-pastel-textPrimary font-semibold text-xl shadow-sm hover:bg-pastel-btnHover transition-all flex items-center justify-center" onclick="pressKey('1')">1</button>
-                    <button class="key-btn h-12 rounded-xl bg-pastel-btn text-pastel-textPrimary font-semibold text-xl shadow-sm hover:bg-pastel-btnHover transition-all flex items-center justify-center" onclick="pressKey('2')">2</button>
-                    <button class="key-btn h-12 rounded-xl bg-pastel-btn text-pastel-textPrimary font-semibold text-xl shadow-sm hover:bg-pastel-btnHover transition-all flex items-center justify-center" onclick="pressKey('3')">3</button>
-
-                    <button class="key-btn h-12 rounded-xl bg-pastel-btn text-pastel-textPrimary font-semibold text-xl shadow-sm hover:bg-pastel-btnHover transition-all flex items-center justify-center" onclick="pressKey('4')">4</button>
-                    <button class="key-btn h-12 rounded-xl bg-pastel-btn text-pastel-textPrimary font-semibold text-xl shadow-sm hover:bg-pastel-btnHover transition-all flex items-center justify-center" onclick="pressKey('5')">5</button>
-                    <button class="key-btn h-12 rounded-xl bg-pastel-btn text-pastel-textPrimary font-semibold text-xl shadow-sm hover:bg-pastel-btnHover transition-all flex items-center justify-center" onclick="pressKey('6')">6</button>
-
-                    <button class="key-btn h-12 rounded-xl bg-pastel-btn text-pastel-textPrimary font-semibold text-xl shadow-sm hover:bg-pastel-btnHover transition-all flex items-center justify-center" onclick="pressKey('7')">7</button>
-                    <button class="key-btn h-12 rounded-xl bg-pastel-btn text-pastel-textPrimary font-semibold text-xl shadow-sm hover:bg-pastel-btnHover transition-all flex items-center justify-center" onclick="pressKey('8')">8</button>
-                    <button class="key-btn h-12 rounded-xl bg-pastel-btn text-pastel-textPrimary font-semibold text-xl shadow-sm hover:bg-pastel-btnHover transition-all flex items-center justify-center" onclick="pressKey('9')">9</button>
-
-                    <button class="key-btn h-12 rounded-xl bg-pastel-btn text-pastel-accent font-bold text-lg shadow-sm hover:bg-pastel-btnHover transition-all flex items-center justify-center" onclick="clearPin()">C</button>
-                    <button class="key-btn h-12 rounded-xl bg-pastel-btn text-pastel-textPrimary font-semibold text-xl shadow-sm hover:bg-pastel-btnHover transition-all flex items-center justify-center" onclick="pressKey('0')">0</button>
-                    <button class="key-btn h-12 rounded-xl bg-pastel-btn text-pastel-sub font-semibold text-lg shadow-sm hover:bg-pastel-btnHover transition-all flex items-center justify-center" onclick="deletePin()">
-                        <i class="fas fa-backspace text-base"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- UI STATE 2: UNLOCKED WISHES DISPLAY (Initially Hidden) -->
-        <div id="wishScreen" class="hidden flex flex-col items-center text-center p-4 sm:p-8 animate-fade-in">
-            <!-- Floating Heart Icon -->
-            <div class="w-20 h-20 bg-pink-100 rounded-full flex items-center justify-center mb-4 text-pastel-accent text-3xl shadow-md animate-bounce">
-                ❤️
-            </div>
-            
-            <h1 class="font-cursive text-4xl sm:text-5xl text-pastel-accent font-bold mb-3">
-                Happy Birthday Công Chúa! 🎉🎂
-            </h1>
-            
-            <p class="font-serif italic text-lg sm:text-xl text-pastel-textPrimary tracking-widest uppercase mb-6 opacity-90">
-                " VẠN CÁI NẮM ĐÔI BÀN TAY "
-            </p>
-
-            <div class="bg-[#FDF0ED] p-6 rounded-2xl border border-pastel-accent/20 max-w-lg mb-6 shadow-sm">
-                <p id="customWishText" class="text-pastel-textPrimary leading-relaxed text-base sm:text-lg">
-                    Chúc công chúa một ngày sinh nhật thật ngọt ngào, luôn xinh đẹp, rạng rỡ và tràn ngập hạnh phúc. Cảm ơn em vì đã đến và làm thế giới này trở nên dịu dàng hơn! ✨🌸
-                </p>
-            </div>
-
-            <!-- Lock Back Button -->
-            <button onclick="relock()" class="bg-pastel-accent hover:bg-pastel-hover text-white font-medium px-6 py-2.5 rounded-full shadow-md transition-all text-sm flex items-center gap-2">
-                <i class="fas font-solid fa-lock text-xs"></i> Khóa lại
-            </button>
-        </div>
-    </main>
-
-    <!-- Footer Quote from Screenshot -->
-    <div class="fixed bottom-6 text-center z-10">
-        <p class="font-serif text-xs sm:text-sm tracking-[0.2em] text-pastel-textSub uppercase font-semibold">
-            " VẠN CÁI NẮM ĐÔI BÀN TAY "
-        </p>
-    </div>
-
-    <!-- Script Logic -->
-    <script>
-        /* CONFIGURATION VARIABLES */
-        const CONFIG = {
-            correctPin: "1205", // Mặc định ngày sinh (vd: 12/05 - thay đổi tại đây)
-            photoUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80"
-        };
-
-        let currentInput = "";
-        const maxPinLength = 4;
-        let isMusicPlaying = false;
-
-        // Audio control
-        const audio = document.getElementById('bgMusic');
-        const musicToggle = document.getElementById('musicToggle');
-        const musicIcon = document.getElementById('musicIcon');
-
-        musicToggle.addEventListener('click', () => {
-            if (isMusicPlaying) {
-                audio.pause();
-                musicIcon.classList.remove('fa-compact-disc', 'fa-spin', 'text-pink-500');
-                musicIcon.classList.add('fa-music');
-            } else {
-                audio.play().catch(e => console.log("Audio play blocked by browser"));
-                musicIcon.classList.remove('fa-music');
-                musicIcon.classList.add('fa-compact-disc', 'fa-spin', 'text-pink-500');
-            }
-            isMusicPlaying = !isMusicPlaying;
-        });
-
-        // Generate Floating Background Hearts
-        function createHeartParticle() {
-            const container = document.getElementById('hearts-container');
-            const heart = document.createElement('div');
-            heart.classList.add('heart-particle');
-            
-            // Random styling
-            const size = Math.random() * 20 + 10;
-            const left = Math.random() * 100;
-            const duration = Math.random() * 5 + 5;
-            const opacity = Math.random() * 0.6 + 0.3;
-
-            heart.style.left = `${left}vw`;
-            heart.style.animationDuration = `${duration}s`;
-            heart.style.fontSize = `${size}px`;
-            heart.style.opacity = opacity;
-            heart.innerHTML = '❤️';
-
-            container.appendChild(heart);
-
-            setTimeout(() => {
-                heart.remove();
-            }, duration * 1000);
-        }
-
-        setInterval(createHeartParticle, 400);
-
-        // Keypad Interactions
-        function updateDisplay() {
-            const display = document.getElementById('pinDisplay');
-            display.innerHTML = '';
-            
-            for (let i = 0; i < maxPinLength; i++) {
-                const dot = document.createElement('span');
-                dot.className = 'text-2xl font-bold transition-all duration-200';
-                
-                if (i < currentInput.length) {
-                    dot.innerText = currentInput[i];
-                    dot.className += ' text-pastel-accent scale-110';
-                } else {
-                    dot.innerText = '•';
-                    dot.className += ' text-pastel-sub/40';
-                }
-                display.appendChild(dot);
-            }
-        }
-
-        function pressKey(num) {
-            if (currentInput.length < maxPinLength) {
-                currentInput += num;
-                updateDisplay();
-
-                // Auto check when length reached
-                if (currentInput.length === maxPinLength) {
-                    setTimeout(verifyPin, 200);
-                }
-            }
-        }
-
-        function clearPin() {
-            currentInput = "";
-            updateDisplay();
-        }
-
-        function deletePin() {
-            if (currentInput.length > 0) {
-                currentInput = currentInput.slice(0, -1);
-                updateDisplay();
-            }
-        }
-
-        function verifyPin() {
-            if (currentInput === CONFIG.correctPin) {
-                unlockSuccess();
-            } else {
-                triggerShake();
-            }
-        }
-
-        function triggerShake() {
-            const card = document.getElementById('mainCard');
-            const display = document.getElementById('pinDisplay');
-            
-            card.classList.add('shake');
-            display.classList.add('border-red-400', 'bg-red-50');
-
-            setTimeout(() => {
-                card.classList.remove('shake');
-                display.classList.remove('border-red-400', 'bg-red-50');
-                clearPin();
-            }, 450);
-        }
-
-        function unlockSuccess() {
-            // Trigger Confetti
-            confetti({
-                particleCount: 100,
-                spread: 70,
-                origin: { y: 0.6 }
-            });
-
-            // Heart Confetti explosion
-            setTimeout(() => {
-                confetti({
-                    particleCount: 50,
-                    angle: 60,
-                    spread: 55,
-                    origin: { x: 0 },
-                    colors: ['#E89088', '#FF69B4', '#FFB6C1']
-                });
-                confetti({
-                    particleCount: 50,
-                    angle: 120,
-                    spread: 55,
-                    origin: { x: 1 },
-                    colors: ['#E89088', '#FF69B4', '#FFB6C1']
-                });
-            }, 250);
-
-            // Auto Play Music if paused
-            if (!isMusicPlaying) {
-                audio.play().then(() => {
-                    isMusicPlaying = true;
-                    musicIcon.classList.remove('fa-music');
-                    musicIcon.classList.add('fa-compact-disc', 'fa-spin', 'text-pink-500');
-                }).catch(() => {});
-            }
-
-            // Switch Screen
-            document.getElementById('lockScreen').classList.add('hidden');
-            document.getElementById('wishScreen').classList.remove('hidden');
-        }
-
-        function relock() {
-            currentInput = "";
-            updateDisplay();
-            document.getElementById('wishScreen').classList.add('hidden');
-            document.getElementById('lockScreen').classList.remove('hidden');
-        }
-
-        // Initialize display
-        updateDisplay();
-    </script>
-</body>
-</html>
+    @
