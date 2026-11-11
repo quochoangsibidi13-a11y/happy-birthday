@@ -67,4 +67,281 @@
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    @
+    @media (max-width: 600px) {
+      .card-container {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    /* Photo Frame */
+    .photo-frame {
+      width: 240px;
+      height: 300px;
+      border-radius: 16px;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Keypad Section */
+    .keypad-section {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .title {
+      color: #e57373;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .pin-display {
+      background: #fce8e6;
+      width: 100%;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .pin-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #e0e0e0;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .pin-dot.filled {
+      background: var(--primary);
+      transform: scale(1.2);
+    }
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      width: 100%;
+      max-width: 240px;
+    }
+
+    .key-btn {
+      background: transparent;
+      border: none;
+      height: 48px;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      color: var(--text-color);
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+
+    .key-btn:active {
+      background: #fce8e6;
+      transform: scale(0.95);
+    }
+
+    /* Success Overlay Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 32px;
+      border-radius: 24px;
+      text-align: center;
+      max-width: 400px;
+      width: 85%;
+      transform: translateY(20px);
+      transition: transform 0.4s ease;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: translateY(0);
+    }
+
+    .modal-title {
+      font-size: 1.8rem;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .modal-body {
+      color: #555;
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .btn-close {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 20px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Hearts Container -->
+  <div id="hearts-bg"></div>
+
+  <!-- Main Locked Interface -->
+  <div class="card-container">
+    <div class="photo-frame">
+      <!-- Ảnh đã được mã hóa trực tiếp vào code -->
+      <img id="princess-img" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=600" alt="Princess Photo">
+    </div>
+
+    <div class="keypad-section">
+      <div class="title">Hãy nhập ngày sinh của công chúa</div>
+      
+      <div class="pin-display">
+        <div class="pin-dot"></div>
+        <div class="pin-dot"></div>
+        <div class="pin-dot"></div>
+        <div class="pin-dot"></div>
+      </div>
+
+      <div class="keypad">
+        <button class="key-btn" onclick="pressKey('1')">1</button>
+        <button class="key-btn" onclick="pressKey('2')">2</button>
+        <button class="key-btn" onclick="pressKey('3')">3</button>
+        <button class="key-btn" onclick="pressKey('4')">4</button>
+        <button class="key-btn" onclick="pressKey('5')">5</button>
+        <button class="key-btn" onclick="pressKey('6')">6</button>
+        <button class="key-btn" onclick="pressKey('7')">7</button>
+        <button class="key-btn" onclick="pressKey('8')">8</button>
+        <button class="key-btn" onclick="pressKey('9')">9</button>
+        <button class="key-btn" onclick="clearPin()">C</button>
+        <button class="key-btn" onclick="pressKey('0')">0</button>
+        <button class="key-btn" onclick="deletePin()">⌫</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Birthday Surprise Modal -->
+  <div class="modal-overlay" id="surprise-modal">
+    <div class="modal-content">
+      <div class="modal-title">🎉 Happy Birthday! 🎂</div>
+      <div class="modal-body">
+        Chúc Công Chúa nhỏ luôn xinh đẹp, rạng rỡ và tràn ngập niềm vui mỗi ngày! 💖✨
+      </div>
+      <button class="btn-close" onclick="closeModal()">Cảm ơn anh ❤️</button>
+    </div>
+  </div>
+
+  <script>
+    // ===== Cấu hình =====
+    const CORRECT_PIN = "1111"; // Thay đổi mã PIN tại đây (Ví dụ ngày 07 tháng 03)
+
+    let currentPin = "";
+    const dots = document.querySelectorAll('.pin-dot');
+
+    function updateDots() {
+      dots.forEach((dot, index) => {
+        if (index < currentPin.length) {
+          dot.classList.add('filled');
+        } else {
+          dot.classList.remove('filled');
+        }
+      });
+    }
+
+    function pressKey(num) {
+      if (currentPin.length < 4) {
+        currentPin += num;
+        updateDots();
+
+        if (currentPin.length === 4) {
+          setTimeout(checkPin, 200);
+        }
+      }
+    }
+
+    function clearPin() {
+      currentPin = "";
+      updateDots();
+    }
+
+    function deletePin() {
+      currentPin = currentPin.slice(0, -1);
+      updateDots();
+    }
+
+    function checkPin() {
+      if (currentPin === CORRECT_PIN) {
+        document.getElementById('surprise-modal').classList.add('active');
+        createConfetti();
+      } else {
+        alert("Sai ngày sinh rồi công chúa ơi! Thử lại nha 💖");
+        clearPin();
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('surprise-modal').classList.remove('active');
+      clearPin();
+    }
+
+    // Background floating hearts animation
+    function generateHearts() {
+      const container = document.getElementById('hearts-bg');
+      const hearts = ['❤️', '💖', '🌸', '💕', '✨'];
+      for (let i = 0; i < 25; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'bg-heart';
+        heart.innerText = hearts[Math.floor(Math.random() * hearts.length)];
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+        heart.style.animationDelay = (Math.random() * 5) + 's';
+        heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
+        container.appendChild(heart);
+      }
+    }
+
+    generateHearts();
+  </script>
+</body>
+</html>
