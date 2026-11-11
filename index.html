@@ -3,22 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Happy Birthday Công Chúa</title>
+  <title>Món Quà Sinh Nhật</title>
   <style>
     :root {
       --bg-color: #f7e6e3;
-      --card-bg: rgba(255, 255, 255, 0.9);
+      --card-bg: rgba(255, 255, 255, 0.95);
       --primary: #f28b82;
-      --primary-hover: #e57373;
-      --text-color: #5f6368;
       --accent: #e91e63;
+      --text-color: #4a4a4a;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', Roboto, sans-serif;
       user-select: none;
     }
 
@@ -32,27 +31,41 @@
       position: relative;
     }
 
-    /* Floating hearts background */
+    /* Hiệu ứng bong bóng trái tim */
     .bg-heart {
       position: absolute;
-      color: rgba(242, 139, 130, 0.4);
+      color: rgba(242, 139, 130, 0.35);
       animation: floatUp linear infinite;
       z-index: 1;
       pointer-events: none;
     }
 
     @keyframes floatUp {
-      0% {
-        transform: translateY(100vh) scale(0.5) rotate(0deg);
-        opacity: 0.8;
-      }
-      100% {
-        transform: translateY(-10vh) scale(1.2) rotate(360deg);
-        opacity: 0;
-      }
+      0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0.8; }
+      100% { transform: translateY(-10vh) scale(1.2) rotate(360deg); opacity: 0; }
     }
 
-    /* Main Card Container */
+    .screen {
+      display: none;
+      width: 100%;
+      height: 100vh;
+      position: absolute;
+      top: 0;
+      left: 0;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    .screen.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    /* --- BƯỚC 1: ĐĂNG NHẬP (PIN) --- */
     .card-container {
       background: var(--card-bg);
       padding: 24px;
@@ -62,22 +75,16 @@
       gap: 24px;
       max-width: 680px;
       width: 90%;
-      z-index: 10;
       backdrop-filter: blur(10px);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     @media (max-width: 600px) {
-      .card-container {
-        flex-direction: column;
-        align-items: center;
-      }
+      .card-container { flex-direction: column; align-items: center; }
     }
 
-    /* Photo Frame */
     .photo-frame {
-      width: 240px;
-      height: 300px;
+      width: 220px;
+      height: 280px;
       border-radius: 16px;
       overflow: hidden;
       flex-shrink: 0;
@@ -90,7 +97,6 @@
       object-fit: cover;
     }
 
-    /* Keypad Section */
     .keypad-section {
       flex-grow: 1;
       display: flex;
@@ -111,7 +117,7 @@
     .pin-display {
       background: #fce8e6;
       width: 100%;
-      height: 48px;
+      height: 44px;
       border-radius: 12px;
       display: flex;
       justify-content: center;
@@ -125,7 +131,7 @@
       height: 12px;
       border-radius: 50%;
       background: #e0e0e0;
-      transition: background 0.2s ease, transform 0.2s ease;
+      transition: background 0.2s, transform 0.2s;
     }
 
     .pin-dot.filled {
@@ -136,15 +142,15 @@
     .keypad {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      gap: 10px;
       width: 100%;
-      max-width: 240px;
+      max-width: 220px;
     }
 
     .key-btn {
       background: transparent;
       border: none;
-      height: 48px;
+      height: 44px;
       border-radius: 12px;
       font-size: 1.2rem;
       color: var(--text-color);
@@ -152,7 +158,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      transition: background 0.15s ease, transform 0.1s ease;
+      transition: background 0.15s, transform 0.1s;
     }
 
     .key-btn:active {
@@ -160,14 +166,152 @@
       transform: scale(0.95);
     }
 
-    /* Success Overlay Modal */
+    /* --- BƯỚC 2 & 3: LỜI CHÚC DẪN DẮT --- */
+    .fade-text {
+      font-size: 2rem;
+      color: var(--accent);
+      font-weight: bold;
+      text-align: center;
+      padding: 0 20px;
+      line-height: 1.5;
+      animation: pulseText 2s infinite alternate;
+    }
+
+    @keyframes pulseText {
+      0% { transform: scale(0.98); }
+      100% { transform: scale(1.02); }
+    }
+
+    /* --- BƯỚC 4: BÁNH KEM RƠI --- */
+    .cake-box {
+      width: 320px;
+      height: 380px;
+      background: #f48fb1;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+      position: relative;
+      overflow: hidden;
+      border: 4px solid #fff;
+    }
+
+    /* Animation Bánh Kem Rơi theo mã CSS bạn yêu cầu */
+    .cake-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) translateY(-400px);
+      backface-visibility: hidden;
+      animation: dropCake 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    @keyframes dropCake {
+      to {
+        transform: translate(-50%, -50%) translateY(-20px);
+      }
+    }
+
+    .plate {
+      width: 220px;
+      height: 12px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .cake-layer {
+      width: 180px;
+      height: 50px;
+      background: #d7ccc8;
+      border-radius: 8px 8px 0 0;
+      position: relative;
+      border-bottom: 8px solid #8d6e63;
+    }
+
+    .cake-layer-top {
+      width: 140px;
+      height: 45px;
+      background: #f8bbd0;
+      border-radius: 8px 8px 0 0;
+      border-bottom: 8px solid #f48fb1;
+    }
+
+    .candle {
+      width: 10px;
+      height: 35px;
+      background: repeating-linear-gradient(45deg, #fff, #fff 5px, #ef5350 5px, #ef5350 10px);
+      border-radius: 3px;
+      position: relative;
+    }
+
+    .flame {
+      width: 12px;
+      height: 18px;
+      background: #ffb74d;
+      border-radius: 50% 50% 20% 20%;
+      position: absolute;
+      top: -18px;
+      left: -1px;
+      box-shadow: 0 0 10px #ff9800;
+      animation: flicker 0.6s infinite alternate;
+    }
+
+    @keyframes flicker {
+      0% { transform: scale(1); opacity: 0.9; }
+      100% { transform: scale(1.2); opacity: 1; }
+    }
+
+    .cake-text {
+      color: white;
+      font-size: 1.6rem;
+      font-weight: bold;
+      margin-top: 15px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .cake-subtext {
+      color: #fff;
+      font-size: 1.1rem;
+      margin-top: 5px;
+      opacity: 0.9;
+    }
+
+    /* --- BƯỚC 5: HỘP QUÀ & LỜI CHÚC --- */
+    .gift-box {
+      font-size: 90px;
+      cursor: pointer;
+      animation: bounce 1s infinite alternate;
+      transition: transform 0.2s;
+    }
+
+    .gift-box:hover {
+      transform: scale(1.15);
+    }
+
+    @keyframes bounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-20px); }
+    }
+
+    .gift-hint {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* Popup Lời Chúc */
     .modal-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
       z-index: 100;
       display: flex;
       justify-content: center;
@@ -182,110 +326,137 @@
       pointer-events: auto;
     }
 
-    .modal-content {
+    .modal-card {
       background: white;
-      padding: 32px;
+      padding: 30px;
       border-radius: 24px;
       text-align: center;
-      max-width: 400px;
+      max-width: 420px;
       width: 85%;
-      transform: translateY(20px);
-      transition: transform 0.4s ease;
       box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      transform: scale(0.8);
+      transition: transform 0.4s ease;
     }
 
-    .modal-overlay.active .modal-content {
-      transform: translateY(0);
+    .modal-overlay.active .modal-card {
+      transform: scale(1);
     }
 
     .modal-title {
       font-size: 1.8rem;
       color: var(--accent);
-      margin-bottom: 12px;
+      margin-bottom: 15px;
     }
 
     .modal-body {
       color: #555;
-      font-size: 1rem;
+      font-size: 1.05rem;
       line-height: 1.6;
-      margin-bottom: 24px;
+      margin-bottom: 25px;
     }
 
     .btn-close {
       background: var(--primary);
       color: white;
       border: none;
-      padding: 10px 24px;
-      border-radius: 20px;
+      padding: 12px 28px;
+      border-radius: 25px;
       font-size: 1rem;
+      font-weight: bold;
       cursor: pointer;
+      box-shadow: 0 4px 10px rgba(242, 139, 130, 0.4);
     }
   </style>
 </head>
 <body>
 
-  <!-- Floating Hearts Container -->
+  <!-- Floating Hearts Background -->
   <div id="hearts-bg"></div>
 
-  <!-- Main Locked Interface -->
-  <div class="card-container">
-    <div class="photo-frame">
-      <!-- Ảnh đã được mã hóa trực tiếp vào code -->
-      <img id="princess-img" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=600" alt="Princess Photo">
-    </div>
-
-    <div class="keypad-section">
-      <div class="title">Hãy nhập ngày sinh của công chúa</div>
-      
-      <div class="pin-display">
-        <div class="pin-dot"></div>
-        <div class="pin-dot"></div>
-        <div class="pin-dot"></div>
-        <div class="pin-dot"></div>
+  <!-- BƯỚC 1: MÀN HÌNH ĐĂNG NHẬP -->
+  <div class="screen active" id="step1">
+    <div class="card-container">
+      <div class="photo-frame">
+        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=600" alt="Princess Photo">
       </div>
-
-      <div class="keypad">
-        <button class="key-btn" onclick="pressKey('1')">1</button>
-        <button class="key-btn" onclick="pressKey('2')">2</button>
-        <button class="key-btn" onclick="pressKey('3')">3</button>
-        <button class="key-btn" onclick="pressKey('4')">4</button>
-        <button class="key-btn" onclick="pressKey('5')">5</button>
-        <button class="key-btn" onclick="pressKey('6')">6</button>
-        <button class="key-btn" onclick="pressKey('7')">7</button>
-        <button class="key-btn" onclick="pressKey('8')">8</button>
-        <button class="key-btn" onclick="pressKey('9')">9</button>
-        <button class="key-btn" onclick="clearPin()">C</button>
-        <button class="key-btn" onclick="pressKey('0')">0</button>
-        <button class="key-btn" onclick="deletePin()">⌫</button>
+      <div class="keypad-section">
+        <div class="title">Hãy nhập ngày sinh của công chúa</div>
+        <div class="pin-display">
+          <div class="pin-dot"></div>
+          <div class="pin-dot"></div>
+          <div class="pin-dot"></div>
+          <div class="pin-dot"></div>
+        </div>
+        <div class="keypad">
+          <button class="key-btn" onclick="pressKey('1')">1</button>
+          <button class="key-btn" onclick="pressKey('2')">2</button>
+          <button class="key-btn" onclick="pressKey('3')">3</button>
+          <button class="key-btn" onclick="pressKey('4')">4</button>
+          <button class="key-btn" onclick="pressKey('5')">5</button>
+          <button class="key-btn" onclick="pressKey('6')">6</button>
+          <button class="key-btn" onclick="pressKey('7')">7</button>
+          <button class="key-btn" onclick="pressKey('8')">8</button>
+          <button class="key-btn" onclick="pressKey('9')">9</button>
+          <button class="key-btn" onclick="clearPin()">C</button>
+          <button class="key-btn" onclick="pressKey('0')">0</button>
+          <button class="key-btn" onclick="deletePin()">⌫</button>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Birthday Surprise Modal -->
-  <div class="modal-overlay" id="surprise-modal">
-    <div class="modal-content">
-      <div class="modal-title">🎉 Happy Birthday! 🎂</div>
-      <div class="modal-body">
-        Chúc Công Chúa nhỏ luôn xinh đẹp, rạng rỡ và tràn ngập niềm vui mỗi ngày! 💖✨
+  <!-- BƯỚC 2: CHỮ "Hôm nay là sinh nhật của em" -->
+  <div class="screen" id="step2">
+    <div class="fade-text">Hôm nay là sinh nhật của em... ✨</div>
+  </div>
+
+  <!-- BƯỚC 3: CHỮ "Và anh có một món quà dành cho em" -->
+  <div class="screen" id="step3">
+    <div class="fade-text">Và anh có một món quà dành cho em ❤️</div>
+  </div>
+
+  <!-- BƯỚC 4: BÁNH KEM RƠI -->
+  <div class="screen" id="step4">
+    <div class="cake-box">
+      <div class="cake-container">
+        <div class="candle"><div class="flame"></div></div>
+        <div class="cake-layer-top"></div>
+        <div class="cake-layer"></div>
+        <div class="plate"></div>
       </div>
-      <button class="btn-close" onclick="closeModal()">Cảm ơn anh ❤️</button>
+      <div class="cake-text">happy birthday!</div>
+      <div class="cake-subtext">Lovie ❤️</div>
+    </div>
+  </div>
+
+  <!-- BƯỚC 5: HỘP QUÀ VÀ LỜI CHÚC -->
+  <div class="screen" id="step5">
+    <div class="gift-box" onclick="openGift()">🎁</div>
+    <div class="gift-hint">Chạm vào hộp quà để mở nha! 💖</div>
+  </div>
+
+  <!-- MODAL LỜI CHÚC MỞ QUÀ -->
+  <div class="modal-overlay" id="gift-modal">
+    <div class="modal-card">
+      <div class="modal-title">🎉 Chúc Mừng Sinh Nhật! 🎂</div>
+      <div class="modal-body">
+        Chúc công chúa nhỏ của anh luôn luôn xinh đẹp, rạng rỡ, gặp nhiều may mắn và luôn tràn ngập niềm vui mỗi ngày! Yêu em thật nhiều! 💖✨
+      </div>
+      <button class="btn-close" onclick="closeGift()">Cảm ơn anh ❤️</button>
     </div>
   </div>
 
   <script>
-    // ===== Cấu hình =====
-    const CORRECT_PIN = "0703"; // Thay đổi mã PIN tại đây (Ví dụ ngày 07 tháng 03)
+    // ===== CẤU HÌNH MÃ PIN (Mặc định: 0703) =====
+    const CORRECT_PIN = "0703";
 
     let currentPin = "";
     const dots = document.querySelectorAll('.pin-dot');
 
     function updateDots() {
       dots.forEach((dot, index) => {
-        if (index < currentPin.length) {
-          dot.classList.add('filled');
-        } else {
-          dot.classList.remove('filled');
-        }
+        if (index < currentPin.length) dot.classList.add('filled');
+        else dot.classList.remove('filled');
       });
     }
 
@@ -293,39 +464,57 @@
       if (currentPin.length < 4) {
         currentPin += num;
         updateDots();
-
-        if (currentPin.length === 4) {
-          setTimeout(checkPin, 200);
-        }
+        if (currentPin.length === 4) setTimeout(checkPin, 200);
       }
     }
 
-    function clearPin() {
-      currentPin = "";
-      updateDots();
-    }
+    function clearPin() { currentPin = ""; updateDots(); }
+    function deletePin() { currentPin = currentPin.slice(0, -1); updateDots(); }
 
-    function deletePin() {
-      currentPin = currentPin.slice(0, -1);
-      updateDots();
+    function switchScreen(fromId, toId) {
+      const from = document.getElementById(fromId);
+      const to = document.getElementById(toId);
+      from.classList.remove('active');
+      setTimeout(() => {
+        to.classList.add('active');
+      }, 400);
     }
 
     function checkPin() {
       if (currentPin === CORRECT_PIN) {
-        document.getElementById('surprise-modal').classList.add('active');
-        createConfetti();
+        // Bắt đầu chuỗi kịch bản chuyển cảnh
+        switchScreen('step1', 'step2');
+        
+        // Sau 3s chuyển từ câu 1 sang câu 2
+        setTimeout(() => {
+          switchScreen('step2', 'step3');
+        }, 3200);
+
+        // Sau 3s nữa chuyển sang bánh kem rơi
+        setTimeout(() => {
+          switchScreen('step3', 'step4');
+        }, 6500);
+
+        // Sau 5s hiển thị bánh kem thì chuyển sang hộp quà
+        setTimeout(() => {
+          switchScreen('step4', 'step5');
+        }, 11500);
+
       } else {
-        alert("Sai ngày sinh rồi công chúa ơi! Thử lại nha 💖");
+        alert("Sai mã PIN ngày sinh rồi công chúa ơi! thử lại nha 💖");
         clearPin();
       }
     }
 
-    function closeModal() {
-      document.getElementById('surprise-modal').classList.remove('active');
-      clearPin();
+    function openGift() {
+      document.getElementById('gift-modal').classList.add('active');
     }
 
-    // Background floating hearts animation
+    function closeGift() {
+      document.getElementById('gift-modal').classList.remove('active');
+    }
+
+    // Hiệu ứng bong bóng trái tim bay
     function generateHearts() {
       const container = document.getElementById('hearts-bg');
       const hearts = ['❤️', '💖', '🌸', '💕', '✨'];
@@ -340,7 +529,6 @@
         container.appendChild(heart);
       }
     }
-
     generateHearts();
   </script>
 </body>
